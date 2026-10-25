@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ЛоРа — быстрый старт</title>
+<style>
+:root{--bg:#fafaf8;--tx:#1c1f23;--mu:#6b7280;--ac:#0f766e;--ln:#e4e4e0;--cd:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#14171a;--tx:#e8e8e6;--mu:#9aa0a6;--ac:#2dd4bf;--ln:#2a2f34;--cd:#1b1f23}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font:18px/1.7 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+code,.mono{font-family:Consolas,"Cascadia Mono",Menlo,monospace}
+main{max-width:720px;margin:0 auto;padding:0 20px 80px}
+header{padding:12vh 0 6vh}
+.tag{color:var(--ac);font:600 13px/1 Consolas,monospace;letter-spacing:.14em;text-transform:uppercase}
+h1{font-size:clamp(40px,8vw,68px);line-height:1.05;margin:.35em 0 .3em;font-weight:700;letter-spacing:-.02em}
+.lead{font-size:22px;color:var(--mu);margin:0 0 1.2em}
+.by{font-size:15px;color:var(--mu)}
+h2{font-size:30px;line-height:1.2;margin:2.2em 0 .5em;letter-spacing:-.01em}
+h2::before{content:"";display:block;width:36px;height:3px;background:var(--ac);margin-bottom:14px}
+p{margin:0 0 1.1em}
+figure{margin:2em 0}
+.ph{position:relative;aspect-ratio:3/2;border-radius:10px;overflow:hidden;background:var(--cd);border:1px dashed var(--ln)}
+.ph img,.ph video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.ph.empty img,.ph.empty video{display:none}
+.ph.empty::after{content:attr(data-label);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--mu);font-size:15px}
+figcaption{font-size:14px;color:var(--mu);margin-top:10px}
+.box{background:var(--cd);border:1px solid var(--ln);border-radius:10px;padding:22px}
+.box svg{width:100%;height:auto;display:block}
+.tl{list-style:none;margin:1.5em 0;padding:0 0 0 22px;border-left:2px solid var(--ln)}
+.tl li{position:relative;padding:0 0 26px 18px}
+.tl li::before{content:"";position:absolute;left:-30px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--ac)}
+.tl b{display:block;font:700 20px/1.3 Consolas,monospace;color:var(--ac)}
+.tl span{color:var(--mu);font-size:16px}
+ol.st{padding-left:1.2em}ol.st li{margin-bottom:.6em}
+table{width:100%;border-collapse:collapse;font-size:16px;margin:1em 0}
+td{padding:10px 12px;border-bottom:1px solid var(--ln)}
+td:last-child{font-family:Consolas,monospace;color:var(--ac);text-align:right}
+.note{border-left:3px solid var(--ac);padding:2px 0 2px 16px;color:var(--mu);margin:1.6em 0}
+.q{margin-bottom:1.6em}.q h3{font-size:18px;margin:0 0 .6em}
+.q button{display:block;width:100%;text-align:left;font:inherit;font-size:16px;color:var(--tx);background:var(--cd);border:1px solid var(--ln);border-radius:8px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
+.q button:hover:not(:disabled){border-color:var(--ac)}
+.q button.ok{border-color:#16a34a;background:rgba(22,163,74,.12)}
+.q button.no{border-color:#dc2626;background:rgba(220,38,38,.1)}
+#res{font-weight:600;font-size:20px;color:var(--ac)}
+footer{margin-top:4em;padding-top:20px;border-top:1px solid var(--ln);font-size:14px;color:var(--mu)}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="tag">Mesh · LoRa · Meshtastic</div>
+  <h1>ЛоРа — быстрый старт</h1>
+  <p class="lead">Как за один вечер собрать личную радиосеть для текстовых сообщений, которой не нужен ни интернет, ни сотовая связь.</p>
+  <div class="by">Автор: Данила Пасечник · 2026</div>
+</header>
+
+<p>Связь кажется чем-то само собой разумеющимся, пока не пропадает. Достаточно аварии на вышке или поездки за город, и мессенджер превращается в бесполезный значок. Для таких случаев существует технология LoRa и построенная на ней система Meshtastic.</p>
+<p>Если совсем просто, это обычное радио, но общаетесь вы не голосом, а текстом, как в привычном чате. Каналы, группы и права доступа вы настраиваете сами. Сеть работает автономно и ничего не стоит.</p>
+
+<figure>
+  <div class="ph" data-label="Фото 1 — плата Heltec V4 в корпусе, с подключённой антенной (img/photo1.jpg)"><img src="img/photo1.jpg" alt="Плата Heltec V4 в корпусе с антенной" onerror="this.parentNode.classList.add('empty')"></div>
+  <figcaption>Рис. 1. Нода на плате Heltec V4: экран, две кнопки управления и разъём антенны. Фото: Д. Пасечник.</figcaption>
+</figure>
+
+<h2>Что это такое</h2>
+<p>Название LoRa происходит от английского «long range», то есть «большая дальность». Это способ передачи данных на радиочастотах с очень малым энергопотреблением. Сообщения получаются короткими, зато устройство годами живёт на небольшом аккумуляторе, а сигнал уверенно проходит там, где Wi‑Fi уже не справляется.</p>
+<p>Meshtastic — открытый проект, который превращает платы с LoRa-модулем в узлы сети. Один такой узел называется нодой. Он состоит из платы, антенны и специальной прошивки.</p>
+
+<h2>Как сообщение находит адресата</h2>
+<p>Нода не обязана «видеть» собеседника напрямую. Пакет данных передаётся от одной ноды к другой, пока не дойдёт до цели. Каждая такая передача называется прыжком. Чем больше нод в округе, тем плотнее покрытие сети.</p>
+<div class="box">
+<svg viewBox="0 0 700 190" role="img" aria-label="Схема передачи сообщения через ноды" font-family="Segoe UI,Arial,sans-serif" font-size="15">
+  <g fill="none" stroke="var(--ac)" stroke-width="2.5" stroke-linecap="round">
+    <path d="M118 80 H222" stroke-dasharray="2 8"/><path d="M298 80 H402" stroke-dasharray="2 8"/><path d="M478 80 H582" stroke-dasharray="2 8"/>
+  </g>
+  <g fill="var(--bg)" stroke="var(--tx)" stroke-width="2">
+    <circle cx="80" cy="80" r="38"/><circle cx="260" cy="80" r="38"/><circle cx="440" cy="80" r="38"/><circle cx="620" cy="80" r="38"/>
+  </g>
+  <g fill="var(--tx)" text-anchor="middle">
+    <text x="80" y="85">Вы</text><text x="260" y="85">Нода 1</text><text x="440" y="85">Нода 2</text><text x="620" y="85">Адресат</text>
+  </g>
+  <g fill="var(--ac)" text-anchor="middle" font-weight="600">
+    <text x="170" y="62">прыжок 1</text><text x="350" y="62">прыжок 2</text><text x="530" y="62">прыжок 3</text>
+  </g>
+  <text x="350" y="160" text-anchor="middle" fill="var(--mu)">Лимит прыжков по умолчанию — 3, максимум — 7. Сообщения шифруются ключом канала.</text>
+</svg>
+</div>
+<figcaption>Рис. 2. Схема доставки: сообщение «прыгает» через промежуточные ноды.</figcaption>
+
+<h2>Как всё развивалось</h2>
+<ul class="tl">
+  <li><b>2009</b><span>Два француза начинают разработку технологии дальней маломощной радиосвязи.</span></li>
+  <li><b>2012</b><span>Компания Semtech покупает стартап Cycleo, создавший LoRa.</span></li>
+  <li><b>2015</b><span>Основан альянс LoRa Alliance для развития открытых стандартов.</span></li>
+  <li><b>2020</b><span>Кевин Хестер запускает открытый проект Meshtastic.</span></li>
+  <li><b>Сегодня</b><span>Нода на Heltec V4 помещается в карман и собирается за вечер.</span></li>
+</ul>
+
+<h2>Быстрый старт за шесть шагов</h2>
+<p>Я собираю сеть на плате Heltec V4. Первое и главное правило: <b>никогда не включайте плату без антенны</b>, иначе радиочип может сгореть.</p>
+<ol class="st">
+  <li>Подключите антенну, затем плату к компьютеру кабелем USB Type‑C. Кабель должен передавать данные, а не только заряжать.</li>
+  <li>Откройте онлайн-прошивальщик, выберите Heltec V4, последнюю версию и «Полную прошивку». Отметьте стирание устройства перед прошивкой.</li>
+  <li>Запомните номер порта (у меня COM5) и дождитесь окончания записи.</li>
+  <li>Скачайте клиент Meshtastic для ПК с GitHub и подключитесь по USB.</li>
+  <li>Задайте имя ноды и параметры радиоканала (таблица ниже).</li>
+  <li>Откройте общий чат LongFast на двух устройствах и отправьте первое сообщение.</li>
+</ol>
+<figure>
+  <div class="ph" data-label="Фото 2 — прошивка платы в браузере, выбран порт COM5 (img/photo2.jpg)"><img src="img/photo2.jpg" alt="Прошивка платы в браузере" onerror="this.parentNode.classList.add('empty')"></div>
+  <figcaption>Рис. 3. Прошивка платы через онлайн-сервис. Скриншот: Д. Пасечник.</figcaption>
+</figure>
+
+<table>
+  <tr><td>Режим работы</td><td>LONG_FAST</td></tr>
+  <tr><td>Частота в городе</td><td>869,075 МГц</td></tr>
+  <tr><td>За городом (LPD)</td><td>≈ 433 МГц</td></tr>
+  <tr><td>Лимит прыжков</td><td>2 для теста, до 7</td></tr>
+  <tr><td>Роль устройства</td><td>CLIENT</td></tr>
+</table>
+<p class="note">После смены настроек плата может перезагрузиться, это нормально. Не забудьте сохранить ключи шифрования во вкладке «Безопасность».</p>
+
+<figure>
+  <div class="ph" data-label="Фото 3 — чат LongFast: сообщения на компьютере и телефоне (img/photo3.jpg)"><img src="img/photo3.jpg" alt="Чат LongFast на двух устройствах" onerror="this.parentNode.classList.add('empty')"></div>
+  <figcaption>Рис. 4. Первое тестовое сообщение дошло с компьютера на телефон. Фото: Д. Пасечник.</figcaption>
+</figure>
+
+<h2>Смотрим в действии</h2>
+<p>Полный процесс от прошивки до обмена сообщениями я показал в видео.</p>
+<figure>
+  <div class="ph" data-label="Видео — ЛоРа: быстрый старт (video/lora.mp4, 1080p)"><video controls preload="metadata" onerror="this.parentNode.classList.add('empty')"><source src="video/lora.mp4" type="video/mp4"></video></div>
+  <figcaption>Видео 1. «ЛоРа — быстрый старт». Автор: Д. Пасечник.</figcaption>
+</figure>
+
+<h2>Проверьте себя</h2>
+<div id="quiz"></div>
+<div id="res"></div>
+
+<footer>Автор: Данила Пасечник, студент ДВГУПС, группа БОМ21ПИА. Практическая работа №6 «Лонгрид». Факты по истории LoRa — по материалам Semtech и проекта Meshtastic.</footer>
+</main>
+
+<script>
+const Q=[
+["Что означает название LoRa?",["Long Range — большая дальность","Low Radio — слабое радио","Local Router — локальный роутер"],0],
+["Нужен ли интернет, чтобы ноды обменивались сообщениями?",["Да, нужен Wi‑Fi","Да, нужна сотовая сеть","Нет, они работают автономно"],2],
+["Что обязательно проверить до включения платы?",["Заряд телефона","Что антенна подключена","Версию Windows"],1],
+["Что определяет лимит прыжков?",["Через сколько нод может пройти сообщение","Скорость интернета","Размер экрана платы"],0],
+["Какую роль выбирают для обычной ноды?",["CLIENT","ROUTER_ONLY","SENSOR"],0]
+];
+let score=0,done=0;
+const quiz=document.getElementById("quiz"),res=document.getElementById("res");
+Q.forEach((q,i)=>{
+  const d=document.createElement("div");d.className="q";
+  d.innerHTML="<h3>"+(i+1)+". "+q[0]+"</h3>";
+  q[1].forEach((t,j)=>{
+    const b=document.createElement("button");b.textContent=t;
+    b.onclick=()=>{
+      d.querySelectorAll("button").forEach((x,k)=>{x.disabled=true;if(k===q[2])x.classList.add("ok")});
+      if(j===q[2])score++;else b.classList.add("no");
+      if(++done===Q.length)res.textContent="Ваш результат: "+score+" из "+Q.length;
+    };
+    d.appendChild(b);
+  });
+  quiz.appendChild(d);
+});
+</script>
+</body>
+</html>
